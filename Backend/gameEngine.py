@@ -1,24 +1,28 @@
+from logging import exception
 import random
 
-class player():
-    def __init__(self):
-        self.name = ""
+class player:
+    def __init__(self, name):
+        self.name = name
         self.isLiberal = False
         self.isChancellor = False
         self.isPresident = False
         self.isDead = False
 
 class liberal(player):
-    def __init__(self):
+    def __init__(self, name):
+        player.__init__(self, name)
         self.IsLiberal = True
         
 
 class fascist(player):
-    def __init__(self):
+    def __init__(self, name):
+        player.__init__(self, name)
         self.isHitler = False
 
 class hitler(fascist):
-    def __init__(self):
+    def __init__(self, name):
+        player.__init__(self, name)
         self.isHitler = True
 
 class gameDeck():
@@ -56,6 +60,23 @@ class game():
         roles.extend(['L']*(playerCount - len(roles)))
         random.shuffle(roles)
         return roles
+
+    def assignRolesToPlayers(self):
+        myRoles = self.prepareRoles(len(self.loby))
+
+        for playerName in self.loby:
+            thisRole = myRoles.pop()
+            self.addPlayer(self.giveRole(playerName, thisRole))
+
+    def giveRole(self, playerName, role):
+        match role:
+            case 'H':
+                self.addPlayer(hitler(playerName))
+            case 'F':
+                self.addPlayer(fascist(playerName))
+            case 'L':
+                self.addPlayer(liberal(playerName))
+    
 
 
 
